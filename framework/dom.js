@@ -50,7 +50,17 @@ function render(vnode) {
   return node;
 }
 
+let currentVnode = null;
+
 export function mount(vnode, holderId) {
+  if (!currentVnode) {
+    initMount(vnode, holderId);
+  } else {
+
+  }
+}
+
+function initMount(vnode, holderId) {
   const holder = document.getElementById(holderId);
   const node = render(vnode);
 
@@ -62,3 +72,4 @@ export function mount(vnode, holderId) {
   const parent = holder.parentNode;
   parent.replaceChild(node, holder);
 }
+

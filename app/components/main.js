@@ -1,5 +1,6 @@
 import { createVnode } from "../../framework/dom.js";
 
+import ToggleAllContainer from "./toggle-all-container.js";
 import TodoList from "./todo-list.js";
 
 function getFilteredTodos(filter, todos) {
@@ -20,10 +21,12 @@ function getFilteredTodos(filter, todos) {
 
 export default function Main(dispatch, { todos, filter, editingId }) {
   const filtered = getFilteredTodos(filter, todos);
+  const allCompleted = todos.every((todo) => todo.completed);
 
   return createVnode(
     "main",
     { class: "main", "data-testid": "main" },
-    filtered.length > 0 && TodoList(dispatch, filtered, editingId),
+    filtered.length > 0 && ToggleAllContainer(dispatch, allCompleted),
+    TodoList(dispatch, filtered, editingId),
   );
 }

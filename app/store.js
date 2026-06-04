@@ -36,8 +36,29 @@ const actions = {
     return { ...state, editingId: todoId };
   },
 
+  cancelEditing(state) {
+    return { ...state, editingId: null };
+  },
+
+  editTodo(state, { todoId, title }) {
+    return {
+      ...state,
+      todos: state.todos.map((todo) =>
+        todoId === todo.id ? { ...todo, title: title } : todo,
+      ),
+      editingId: null,
+    };
+  },
+
   clearCompletedTodos(state) {
     return { ...state, todos: state.todos.filter((todo) => !todo.completed) };
+  },
+
+  toggleAll(state, allCompleted) {
+    return {
+      ...state,
+      todos: state.todos.map((todo) => ({ ...todo, completed: !allCompleted })),
+    };
   },
 };
 

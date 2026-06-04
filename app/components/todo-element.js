@@ -7,7 +7,38 @@ export default function TodoElement(dispatch, todo, isEditing) {
     "div",
     { class: "view" },
     ...(isEditing
-      ? []
+      ? [
+          createVnode(
+            "div",
+            { class: "input-container" },
+            createVnode("input", {
+              class: "new-todo",
+              id: `todo-input-${todo.id}`,
+              type: "text",
+              "data-testid": "text-input",
+              value: todo.title,
+              onKeydown: (e) => {
+                if (e.key === "Enter") {
+                  const trimmed = e.target.value.trim();
+                  if (!trimmed || trimmed.length <= 1) return;
+
+                  submitted = true;
+                  dispatch("editTodo", { todoId: todo.id, title: trimmed });
+                  e.target.value = "";
+                }
+              },
+              onBlur: () => {
+                if (submitted) return;
+                dispatch("cancelEditing");
+              },
+            }),
+            createVnode(
+              "label",
+              { class: "visually-hidden", for: "todo-input" },
+              "Edit Todo Input",
+            ),
+          ),
+        ]
       : [
           createVnode("input", {
             class: "toggle",
@@ -20,7 +51,15 @@ export default function TodoElement(dispatch, todo, isEditing) {
             "label",
             {
               "data-testid": "todo-item-label",
-              ondblclick: () => dispatch("startEditing", todo.id),
+              ondblclick: () => {
+                dispatch("startEditing", todo.id);
+                setTimeout(() => {
+                  const input = document.getElementById(
+                    `todo-input-${todo.id}`,
+                  );
+                  input.focus();
+                }, 0);
+              },
             },
             todo.title,
           ),
@@ -32,27 +71,3 @@ export default function TodoElement(dispatch, todo, isEditing) {
         ]),
   );
 }
-
-// InputContainer({
-//             id: `edit-todo-${todo.id}`,
-//             value: todo.title,
-//             dataTestId: "text-input",
-//             onKeydown: (e) => {
-//               if (e.key === "Enter") {
-//                 const newTitle = e.target.value.trim();
-
-//                 if (!newTitle || newTitle.length <= 1) return;
-
-//                 submitted = true;
-//                 dispatch("editTodo", {
-//                   todoId: todo.id,
-//                   title: newTitle,
-//                 });
-//               }
-//             },
-//             onBlur: () => {
-//               if (submitted) return;
-//               dispatch("cancelEditing");
-//             },
-//             labelText: "Edit Todo Input",
-//           }),
