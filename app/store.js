@@ -7,14 +7,11 @@ const actions = {
   },
 
   addTodo(state, title) {
-    const trimmed = title.trim();
-    if (!trimmed) return state;
-
     return {
       ...state,
       todos: [
         ...state.todos,
-        { id: Date.now(), title: trimmed, completed: false },
+        { id: Date.now(), title: title, completed: false },
       ],
     };
   },

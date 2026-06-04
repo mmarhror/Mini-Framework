@@ -15,7 +15,10 @@ export default function Header(dispatch) {
         placeholder: "What needs to be done?",
         onKeydown: (e) => {
           if (e.key === "Enter") {
-            dispatch("addTodo", e.target.value);
+            const trimmed = e.target.value.trim();
+            if (!trimmed || trimmed.length <= 1) return;
+
+            dispatch("addTodo", trimmed);
             e.target.value = "";
           }
         },
