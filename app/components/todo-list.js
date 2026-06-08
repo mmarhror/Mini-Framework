@@ -11,9 +11,11 @@ export default function TodoList(dispatch, todos, editingId) {
       {
         key: todo.id,
         "data-testid": "todo-item",
-        class: todo.completed ? "completed" : "",
+        class: [todo.completed ? "completed" : "", isEditing ? "editing" : ""]
+          .join(" ")
+          .trim(),
       },
-      TodoElement(dispatch, todo, isEditing),
+      ...TodoElement(dispatch, todo, isEditing),
     );
   });
 

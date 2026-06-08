@@ -1,6 +1,16 @@
 import { createVnode } from "../../framework/dom.js";
 
 export default function Header(dispatch) {
+  function handleKeydown(e) {
+    if (e.key === "Enter") {
+      const trimmed = e.target.value.trim();
+      if (!trimmed || trimmed.length <= 1) return;
+
+      dispatch("addTodo", trimmed);
+      e.target.value = "";
+    }
+  }
+
   return createVnode(
     "header",
     { class: "header", "data-testid": "header" },
@@ -13,16 +23,8 @@ export default function Header(dispatch) {
         id: "todo-input",
         type: "text",
         placeholder: "What needs to be done?",
-        onKeydown: (e) => {
-          if (e.key === "Enter") {
-            const trimmed = e.target.value.trim();
-            if (!trimmed || trimmed.length <= 1) return;
-
-            dispatch("addTodo", trimmed);
-            e.target.value = "";
-          }
-        },
         autofocus: true,
+        onKeydown: handleKeydown,
       }),
       createVnode(
         "label",

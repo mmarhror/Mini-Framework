@@ -21,11 +21,8 @@ function App() {
 }
 
 function renderApp() {
+  console.log("renderApp called");
   mount(App(), "root");
-
-  setTimeout(() => {
-    document.getElementById("todo-input").focus();
-  }, 0);
 }
 
 store.subscribe(renderApp);
